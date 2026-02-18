@@ -1,0 +1,14 @@
+{
+  "gateway_port": null,
+  "client_port": null,
+  "gateway_node_id": "gateway",
+  "client_node_id": "client",
+  "api_base_url": "http://localhost:8000/",
+  "api_token": null,
+  "mode": "general",
+  "log_level": "INFO",
+  "simulate": false,
+  "spool_dir": "C:\\Users\\larau/.atlas_meshtastic_harness",
+  "loop": false,
+  "clear_spool": true
+}

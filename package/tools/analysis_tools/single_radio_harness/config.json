@@ -1,0 +1,9 @@
+{
+  "gateway_node_id": "!9e9f370c",
+  "radio_port": null,
+  "simulate": false,
+  "mode": "general",
+  "spool_path": "~/.atlas_single_radio_spool.json",
+  "clear_spool": true,
+  "log_level": "INFO"
+}

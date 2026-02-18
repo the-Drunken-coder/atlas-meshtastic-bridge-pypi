@@ -1,0 +1,11 @@
+atlas-asset-client>=0.3.0
+msgpack>=1.0.7
+zstandard>=0.22.0
+
+[dev]
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+[meshtastic]
+meshtastic>=2.3.0
+pypubsub>=4.0.3

@@ -1,0 +1,21 @@
+{
+  "entity_id": "asset-drone-001",
+  "type": "asset",
+  "subtype": "drone",
+  "alias": "drone-alpha",
+  "components": {
+    "health": {
+      "battery_percent": 88
+    },
+    "telemetry": {
+      "latitude": 40.23424,
+      "longitude": -75.45365,
+      "altitude_m": 200
+    }
+  },
+  "metadata": {
+    "created_at": "2026-01-05T03:29:01.433990+00:00",
+    "updated_at": "2026-01-05T03:29:01.433990+00:00"
+  },
+  "extra": {}
+}
