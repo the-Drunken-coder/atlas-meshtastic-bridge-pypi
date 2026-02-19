@@ -3,11 +3,18 @@
 This directory contains a **manual testing harness** for the Atlas Meshtastic bridge. It is **not**
 packaged with the library; it is intended for developers to exercise the bridge against real radios.
 
+## Prerequisites
+
+- Python 3.10+
+- `atlas-asset-client>=0.3.0`
+- `meshtastic>=2.3.0` (required for real radios)
+- Two Meshtastic radios connected over USB (or simulation mode)
+
 ## Assumptions
 
 - Two Meshtastic radios are plugged into the laptop running this harness.
 - The Atlas Command API is reachable at `http://localhost:8000/` (adjustable via CLI).
-- `meshtastic-python` and `atlas_asset_http_client_python` are installed so the gateway can talk to
+- `meshtastic` and `atlas_asset_http_client_python` are installed so the gateway can talk to
   both the radio and the HTTP API.
 
 ## Quick start
@@ -32,14 +39,19 @@ Config file (JSON, default path: `tools/hardware_harness/config.json`):
   "client_node_id": "!1234abcd",
   "api_base_url": "http://localhost:8000/",
   "api_token": null,
+  "mode": "general",
+  "reliability_method": null,
+  "modem_preset": null,
   "simulate": false,
-  "timeout": 30.0,
+  "timeout": 90.0,
   "retries": 2,
+  "log_level": "INFO",
   "post_response_quiet": 10.0,
-  "post_response_timeout": 90.0,
+  "post_response_timeout": 150.0,
   "loop": false,
   "clear_spool": false,
-  "spool_dir": "~/.atlas_meshtastic_harness"
+  "spool_dir": "~/.atlas_meshtastic_harness",
+  "transport_overrides": {}
 }
 ```
 
@@ -54,9 +66,11 @@ Press `q` to exit the harness; it will shut down both radios and the gateway thr
 
 ## Notes
 
-- Use the `--simulate` flag to run without hardware; this is helpful for dry runs but will not hit
-  the real radios.
+- Use the `simulate` config key to run without hardware; this is helpful for dry runs but will not
+  hit real radios.
 - Spool files are stored under `~/.atlas_meshtastic_harness/` to avoid interfering with other runs.
+  The harness uses separate files in that directory (for example `gateway_spool.json` and
+  `client_spool.json`).
 - For tokens, prefer exporting `ATLAS_API_TOKEN` so it is not visible in the process list; use
   `--api-token` only when necessary and in trusted environments.
 - If the gateway reports that `atlas_asset_http_client_python` is missing, install it in your

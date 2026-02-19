@@ -29,28 +29,24 @@ def _coerce_components(
 ) -> Any:
     if components is None:
         return None
-    if model is not None:
-        try:
-            if isinstance(components, model):
-                return components
-        except TypeError:
-            # Some tests patch model with a non-type mock. Fall through to constructor path.
-            pass
-
-    # If the typed model is unavailable but we were given a mapping, fail fast with
-    # a clear error instead of returning the raw mapping, which would defer failure.
     if model is None:
-        if isinstance(components, Mapping):
-            raise RuntimeError(
-                "Typed components support is not available. "
-                "Install the optional 'atlas_asset_http_client_python' dependency "
-                "to pass mapping-based components."
-            )
-        return components
+        raise RuntimeError(
+            "Typed components support is not available. "
+            "Ensure the 'atlas-asset-client' dependency is installed."
+        )
+    try:
+        if isinstance(components, model):
+            return components
+    except TypeError:
+        # Some tests patch model with a non-type mock. Fall through to constructor path.
+        pass
 
-    # If the model is available but the components are not a mapping, pass through.
     if not isinstance(components, Mapping):
-        return components
+        model_name = getattr(model, "__name__", repr(model))
+        raise TypeError(
+            f"Components must be provided as {model_name} or a mapping payload, "
+            f"got {type(components).__name__}."
+        )
 
     # Attempt to coerce the mapping into the typed model. On failure, raise a clear
     # exception that preserves the original error for easier debugging.

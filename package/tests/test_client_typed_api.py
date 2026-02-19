@@ -2,6 +2,7 @@ from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
+from atlas_asset_http_client_python.components import EntityComponents
 from atlas_meshtastic_bridge.client import MeshtasticClient
 
 
@@ -58,7 +59,13 @@ def test_create_entity_requires_fields() -> None:
     client = _client_with_mock()
     with pytest.raises(ValueError):
         client.create_entity("", "type", "alias", "sub")
-    resp = client.create_entity("e1", "asset", "alias", "drone", components={"custom_status": "ok"})
+    resp = client.create_entity(
+        "e1",
+        "asset",
+        "alias",
+        "drone",
+        components=EntityComponents(custom_status="ok"),
+    )
     client.send_request.assert_called_once_with(  # type: ignore[attr-defined]
         command="create_entity",
         data={
@@ -70,6 +77,18 @@ def test_create_entity_requires_fields() -> None:
         },
     )
     assert resp == "ok"
+
+
+def test_create_entity_rejects_raw_dict_components() -> None:
+    client = _client_with_mock()
+    with pytest.raises(TypeError, match="Expected EntityComponents or TaskComponents"):
+        client.create_entity(  # type: ignore[arg-type]
+            "e1",
+            "asset",
+            "alias",
+            "drone",
+            components={"custom_status": "ok"},  # type: ignore[arg-type]
+        )
 
 
 def test_transition_task_status_requires_fields() -> None:

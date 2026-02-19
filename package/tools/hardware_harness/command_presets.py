@@ -5,6 +5,10 @@ import os
 import time
 from typing import Any, Dict, List
 
+from atlas_asset_http_client_python.components import (
+    EntityComponents,
+    TelemetryComponent,
+)
 from atlas_meshtastic_bridge.client import MeshtasticClient
 
 # Shared command definitions for the harness interactive menu
@@ -504,7 +508,9 @@ def run_auto_flight(
             entity_type="asset",
             alias=entity_id,
             subtype="drone",
-            components={"telemetry": {"latitude": 40.0, "longitude": -75.0, "altitude_m": 100.0}},
+            components=EntityComponents(
+                telemetry=TelemetryComponent(latitude=40.0, longitude=-75.0, altitude_m=100.0)
+            ),
             timeout=timeout,
             max_retries=retries,
         )

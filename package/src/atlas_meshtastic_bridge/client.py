@@ -5,7 +5,7 @@ import random
 import time
 import uuid
 from datetime import datetime
-from typing import Any, Dict, Mapping, Optional
+from typing import Any, Dict, Optional
 
 from atlas_asset_http_client_python.components import (
     EntityComponents,
@@ -15,7 +15,6 @@ from atlas_asset_http_client_python.components import (
 
 from .message import MessageEnvelope
 from .metrics import DEFAULT_LATENCY_BUCKETS, get_metrics_registry
-from .operations.components import coerce_entity_components, coerce_task_components
 from .transport import MeshtasticTransport
 
 LOGGER = logging.getLogger(__name__)
@@ -23,8 +22,8 @@ BACKOFF_BASE_SECONDS = 0.5
 BACKOFF_JITTER_FACTOR = 0.2
 BACKOFF_MAX_SECONDS = 30.0
 
-EntityComponentsInput = Optional[EntityComponents | Mapping[str, Any]]
-TaskComponentsInput = Optional[TaskComponents | Mapping[str, Any]]
+EntityComponentsInput = Optional[EntityComponents]
+TaskComponentsInput = Optional[TaskComponents]
 
 
 class MeshtasticClient:
@@ -92,7 +91,7 @@ class MeshtasticClient:
             "alias": alias,
             "subtype": subtype,
         }
-        comp_dict = components_to_dict(coerce_entity_components(components))
+        comp_dict = components_to_dict(components)
         if comp_dict is not None:
             payload["components"] = comp_dict
         return self._send_typed("create_entity", payload, timeout, max_retries)
@@ -133,7 +132,7 @@ class MeshtasticClient:
         payload: Dict[str, Any] = {"entity_id": entity_id}
         if subtype is not None:
             payload["subtype"] = subtype
-        comp_dict = components_to_dict(coerce_entity_components(components))
+        comp_dict = components_to_dict(components)
         if comp_dict is not None:
             payload["components"] = comp_dict
         if len(payload) == 1:
@@ -248,7 +247,7 @@ class MeshtasticClient:
             payload["status"] = status
         if entity_id is not None:
             payload["entity_id"] = entity_id
-        comp_dict = components_to_dict(coerce_task_components(components))
+        comp_dict = components_to_dict(components)
         if comp_dict is not None:
             payload["components"] = comp_dict
         if extra is not None:
@@ -301,7 +300,7 @@ class MeshtasticClient:
             payload["status"] = status
         if entity_id is not None:
             payload["entity_id"] = entity_id
-        comp_dict = components_to_dict(coerce_task_components(components))
+        comp_dict = components_to_dict(components)
         if comp_dict is not None:
             payload["components"] = comp_dict
         if extra is not None:
