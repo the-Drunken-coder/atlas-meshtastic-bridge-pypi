@@ -1,5 +1,10 @@
 ﻿# Changelog
 
+## [0.1.15] - 2026-02-19
+- Synced changes from the ATLAS monorepo.
+- Version bump to 0.1.15.
+- Internal updates and maintenance.
+
 ## [0.1.14] - 2026-02-19
 
 - Routine synchronization from upstream ATLAS monorepo (9a23649)
