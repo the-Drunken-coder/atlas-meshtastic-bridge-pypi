@@ -18,22 +18,24 @@ Reliable offline access to Atlas Command over Meshtastic radios. The bridge runs
 ## Payload limits
 
 - **Chunk**: the smallest on-air packet sent over Meshtastic (what the transport already splits and ACKs today).
-- Current behavior: the hardware harness enforces a 10 KB limit for object uploads. Larger transfers are currently disabled; use the Atlas HTTP API instead.
-- Until a segment layer ships, use a staged reliability loop for big transfers: split into chunks, send them once, emit a tiny completion marker, have the receiver respond with missing chunk indices, resend only the gaps, then repeat the completion/missing/resend cycle until nothing is missing.
-- Future plan: reintroduce a proper segment layer (segment = intermediate slice, chunk = on-air packet) with gateway-side reassembly. This is not implemented yet.
+- Current chunk limit is up to **230 bytes** (`MAX_CHUNK_SIZE`) before transport-level retries/ack handling.
+- The hardware harness enforces a **10 KB** limit for object uploads. Larger transfers are currently disabled; use the Atlas HTTP API instead.
+- Keep request payloads small and metadata-focused when operating over radio links.
 
 ## Prerequisites
 
 - Python 3.10+
 - Atlas Command reachable from the gateway (HTTPS recommended)
 - Meshtastic radios flashed with current firmware
+- `atlas-asset-client>=0.3.0` (required)
+- `meshtastic>=2.3.0` (optional for real radios; not needed for `--simulate-radio`)
 - Optional: virtual (in-memory) radio for local testing
 
 Install the bridge as a standalone package (and optionally meshtastic-python for real radios):
 
 ```bash
 cd Atlas_Client_SDKs/connection_packages/atlas_meshtastic_bridge
-pip install -e .[meshtastic]        # includes meshtastic-python
+pip install -e .[meshtastic]        # includes meshtastic
 # or, for simulation-only workflows without hardware drivers:
 pip install -e .
 ```
@@ -69,6 +71,9 @@ CLI flags (client and gateway):
 | `--command` | Client command to run (client mode). |
 | `--data` | JSON payload for the command (client mode). |
 | `--log-level` | Logging level (default: `INFO`). |
+| `--metrics-host` | Host interface for metrics/health server (default: `0.0.0.0`). |
+| `--metrics-port` | Port for metrics/health server (default: `9700`). |
+| `--disable-metrics` | Disable metrics and health endpoints. |
 
 Environment variables (gateway):
 
@@ -207,28 +212,47 @@ python -m atlas_meshtastic_bridge.cli --mode client --gateway-node-id gw-1 \
 | `list_entities` | List entities with pagination. | `limit`, `offset` |
 | `get_entity` | Fetch entity by ID. | `entity_id` |
 | `get_entity_by_alias` | Fetch entity by alias. | `alias` |
+| `create_entity` | Create a new entity. | `entity_id`, `entity_type`, `alias`, `subtype`, optional `components` |
+| `update_entity` | Update entity metadata/components. | `entity_id`, optional `subtype`, `components` |
+| `delete_entity` | Delete entity by ID. | `entity_id` |
 | `checkin_entity` | Check in an entity with optional telemetry and task filters. | `entity_id`, telemetry fields, optional `status_filter`, `limit`, `since`, `fields` |
 | `update_telemetry` | Update entity telemetry. | `entity_id`, telemetry fields (`latitude`, `longitude`, `altitude_m`, `speed_m_s`, `heading_deg`) |
 | `list_tasks` | List tasks. | `limit`, optional `status` |
 | `get_task` | Fetch task by ID. | `task_id` |
 | `get_tasks_by_entity` | Tasks scoped to an entity. | `entity_id`, `limit` |
+| `create_task` | Create a task. | `task_id`, optional `status`, `entity_id`, `components`, `extra` |
+| `update_task` | Update an existing task. | `task_id`, optional `status`, `entity_id`, `components`, `extra` |
+| `delete_task` | Delete task by ID. | `task_id` |
+| `transition_task_status` | Transition task to a new status. | `task_id`, `status` |
 | `start_task` | Mark a task as started. | `task_id` |
 | `complete_task` | Mark task complete. | `task_id`, optional `result` |
 | `fail_task` | Mark task failed. | `task_id`, optional `error_message`, `error_details` |
 | `list_objects` | List objects. | `limit`, `offset` |
+| `create_object` | Create/upload an object (small payloads only). | `object_id`, `content_b64`, `content_type`, optional `file_name`, `usage_hint`, `type`, `referenced_by` |
 | `get_object` | Get object metadata or bytes. | `object_id`, optional `download` |
+| `update_object` | Update object metadata. | `object_id`, optional `usage_hints`, `referenced_by` |
+| `delete_object` | Delete object by ID. | `object_id` |
 | `get_objects_by_entity` | Objects linked to an entity. | `entity_id`, optional `limit` |
 | `get_objects_by_task` | Objects linked to a task. | `task_id`, optional `limit` |
+| `add_object_reference` | Link object to entity/task. | `object_id`, `entity_id` or `task_id` |
+| `remove_object_reference` | Unlink object from entity/task. | `object_id`, `entity_id` or `task_id` |
+| `find_orphaned_objects` | Find objects with no references. | optional `limit`, `offset` |
+| `get_object_references` | List current object references. | `object_id` |
+| `validate_object_references` | Validate object references. | `object_id` |
+| `cleanup_object_references` | Cleanup invalid object references. | `object_id` |
 | `get_changed_since` | Incremental change feed (includes deleted_entities/deleted_tasks/deleted_objects; ~1h in-memory TTL). | `since`, `limit_per_type` |
+| `get_full_dataset` | Fetch complete dataset snapshot. | optional `entity_limit`, `task_limit`, `object_limit` |
+| `health_check` | Check Atlas Command health. | none |
 | `test_echo` | Echo payload for connectivity testing. | free-form |
 
 ## Troubleshooting
 
 - **No response from gateway**: Confirm the gateway process is running, radio IDs match `--gateway-node-id`, and Atlas Command is reachable at `--api-base-url` (check `/health`).
 - **Serial port errors**: Verify the port path and permissions (`sudo usermod -a -G dialout $USER` on Linux). Try `--simulate-radio` to isolate radio issues.
-- **Large payloads dropped**: Messages are chunked to fit Meshtastic limits (~200 bytes). Avoid sending large JSON or binary content; use HTTP uploads instead.
+- **Large payloads dropped**: Messages are chunked to fit Meshtastic limits (up to 230 bytes per chunk). Avoid sending large JSON or binary content; use HTTP uploads instead.
 - **Duplicate or missing responses**: Ensure both radios share the same channel/PSK and that clocks are roughly in sync. The CLI generates a fresh UUID for every request; custom integrations should do the same and reuse that UUID when retrying so deduplication works as expected.
 - **Timeouts**: Increase `--timeout` for slow links. Poor RF conditions may require retries on the client side.
+- **Observability checks**: Metrics and health endpoints are available by default on `http://<metrics-host>:<metrics-port>/metrics`, `/health`, `/ready`, and `/status` unless `--disable-metrics` is set.
 
 ## Where to go next
 
