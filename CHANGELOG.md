@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [0.1.16] - 2026-02-20
+
+- Synchronized package metadata with upstream ATLAS monorepo (commit 1a0db81)
+- Updated `pyproject.toml` version and dependency specifications
+- Maintenance release with no user-facing API changes
+
 ## [0.1.15] - 2026-02-19
 - Synced changes from the ATLAS monorepo.
 - Version bump to 0.1.15.
