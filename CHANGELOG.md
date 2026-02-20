@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## [0.1.18] - 2026-02-20
+
+- Synchronized source from upstream ATLAS monorepo (commit a1830f6).
+- Updated client implementation with latest improvements.
+- Refined task listing operations.
+- Added dedicated test suite for list tasks functionality.
+
 ## [0.1.17] - 2026-02-20
 - Synced changes from the ATLAS monorepo.
 - Version bump to 0.1.17.
