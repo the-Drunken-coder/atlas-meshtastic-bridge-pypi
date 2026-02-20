@@ -13,7 +13,10 @@ async def run(
     data: Dict[str, Any],
 ) -> Any:
     """List tasks with optional status filtering."""
-    payload: Dict[str, Any] = {"limit": int(data.get("limit", 25))}
+    payload: Dict[str, Any] = {
+        "limit": int(data.get("limit", 25)),
+        "offset": int(data.get("offset", 0)),
+    }
     status = data.get("status")
     if status:
         normalized = status if status in VALID_STATUSES else status.lower()

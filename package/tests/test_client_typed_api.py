@@ -211,11 +211,11 @@ def test_update_telemetry_requires_entity_id() -> None:
 
 def test_list_tasks_builds_payload() -> None:
     client = _client_with_mock()
-    client.list_tasks(status="pending", limit=50)
+    client.list_tasks(status="pending", limit=50, offset=4)
 
     client.send_request.assert_called_once_with(  # type: ignore[attr-defined]
         command="list_tasks",
-        data={"status": "pending", "limit": 50},
+        data={"status": "pending", "limit": 50, "offset": 4},
     )
 
 
@@ -225,7 +225,7 @@ def test_list_tasks_default_params() -> None:
 
     client.send_request.assert_called_once_with(  # type: ignore[attr-defined]
         command="list_tasks",
-        data={"limit": 25},
+        data={"limit": 25, "offset": 0},
     )
 
 

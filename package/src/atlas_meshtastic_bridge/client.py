@@ -221,10 +221,11 @@ class MeshtasticClient:
         *,
         status: Optional[str] = None,
         limit: int = 25,
+        offset: int = 0,
         timeout: Optional[float] = None,
         max_retries: Optional[int] = None,
     ) -> MessageEnvelope:
-        payload: Dict[str, Any] = {"limit": limit}
+        payload: Dict[str, Any] = {"limit": limit, "offset": offset}
         if status:
             payload["status"] = status
         return self._send_typed("list_tasks", payload, timeout, max_retries)

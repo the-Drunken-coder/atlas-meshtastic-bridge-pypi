@@ -72,6 +72,7 @@ tests/test_metrics.py
 tests/test_modem_modes.py
 tests/test_modes.py
 tests/test_operations_components.py
+tests/test_operations_list_tasks.py
 tests/test_priority_queue.py
 tests/test_range.py
 tests/test_range_estimation.py

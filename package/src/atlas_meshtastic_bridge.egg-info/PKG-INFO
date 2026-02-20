@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: atlas-meshtastic-bridge
-Version: 0.1.16
+Version: 0.1.17
 Summary: Reliable offline bridge for Atlas Command over Meshtastic radios.
 Author: ATLAS Team
 License-Expression: MIT
