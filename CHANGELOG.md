@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## [0.1.19] - 2026-02-20
+
+- Synchronized source from upstream ATLAS monorepo (commit 4486a6a).
+- Updated package metadata to version 0.1.19.
+- Refreshed test suite for operations list tasks.
+- Internal maintenance and dependency alignment.
+
 ## [0.1.18] - 2026-02-20
 
 - Synchronized source from upstream ATLAS monorepo (commit a1830f6).
