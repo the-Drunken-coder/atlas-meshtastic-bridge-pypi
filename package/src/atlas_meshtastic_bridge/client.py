@@ -159,7 +159,7 @@ class MeshtasticClient:
         altitude_m: Optional[float] = None,
         speed_m_s: Optional[float] = None,
         heading_deg: Optional[float] = None,
-        status_filter: str = "pending,in_progress",
+        status_filter: str = "pending,acknowledged",
         limit: int = 10,
         since: Optional[str | datetime] = None,
         fields: Optional[str] = None,
@@ -340,7 +340,7 @@ class MeshtasticClient:
             max_retries,
         )
 
-    def start_task(
+    def acknowledge_task(
         self,
         task_id: str,
         *,
@@ -348,8 +348,17 @@ class MeshtasticClient:
         max_retries: Optional[int] = None,
     ) -> MessageEnvelope:
         if not task_id:
-            raise ValueError("start_task requires 'task_id'")
-        return self._send_typed("start_task", {"task_id": task_id}, timeout, max_retries)
+            raise ValueError("acknowledge_task requires 'task_id'")
+        return self._send_typed("acknowledge_task", {"task_id": task_id}, timeout, max_retries)
+
+    def start_task(
+        self,
+        task_id: str,
+        *,
+        timeout: Optional[float] = None,
+        max_retries: Optional[int] = None,
+    ) -> MessageEnvelope:
+        return self.acknowledge_task(task_id, timeout=timeout, max_retries=max_retries)
 
     def complete_task(
         self,

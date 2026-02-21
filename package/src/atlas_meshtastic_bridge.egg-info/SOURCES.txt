@@ -45,6 +45,7 @@ src/atlas_meshtastic_bridge/operations/objects/list_objects.py
 src/atlas_meshtastic_bridge/operations/objects/remove_object_reference.py
 src/atlas_meshtastic_bridge/operations/objects/update_object.py
 src/atlas_meshtastic_bridge/operations/objects/validate_object_references.py
+src/atlas_meshtastic_bridge/operations/tasks/acknowledge_task.py
 src/atlas_meshtastic_bridge/operations/tasks/complete_task.py
 src/atlas_meshtastic_bridge/operations/tasks/create_task.py
 src/atlas_meshtastic_bridge/operations/tasks/delete_task.py
@@ -52,7 +53,6 @@ src/atlas_meshtastic_bridge/operations/tasks/fail_task.py
 src/atlas_meshtastic_bridge/operations/tasks/get_task.py
 src/atlas_meshtastic_bridge/operations/tasks/get_tasks_by_entity.py
 src/atlas_meshtastic_bridge/operations/tasks/list_tasks.py
-src/atlas_meshtastic_bridge/operations/tasks/start_task.py
 src/atlas_meshtastic_bridge/operations/tasks/transition_task_status.py
 src/atlas_meshtastic_bridge/operations/tasks/update_task.py
 src/atlas_meshtastic_bridge/reliability/__init__.py

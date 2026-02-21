@@ -261,20 +261,20 @@ def test_get_tasks_by_entity_requires_entity_id() -> None:
         client.get_tasks_by_entity("")
 
 
-def test_start_task_builds_payload() -> None:
+def test_acknowledge_task_builds_payload() -> None:
     client = _client_with_mock()
-    client.start_task("task-123")
+    client.acknowledge_task("task-123")
 
     client.send_request.assert_called_once_with(  # type: ignore[attr-defined]
-        command="start_task",
+        command="acknowledge_task",
         data={"task_id": "task-123"},
     )
 
 
-def test_start_task_requires_task_id() -> None:
+def test_acknowledge_task_requires_task_id() -> None:
     client = _client_with_mock()
-    with pytest.raises(ValueError, match="start_task requires 'task_id'"):
-        client.start_task("")
+    with pytest.raises(ValueError, match="acknowledge_task requires 'task_id'"):
+        client.acknowledge_task("")
 
 
 def test_complete_task_builds_payload() -> None:
@@ -426,7 +426,7 @@ def test_checkin_entity_with_datetime_since() -> None:
         command="checkin_entity",
         data={
             "entity_id": "entity-1",
-            "status_filter": "pending,in_progress",
+            "status_filter": "pending,acknowledged",
             "limit": 10,
             "since": since_dt.isoformat(),
             "fields": "minimal",

@@ -306,7 +306,7 @@ def test_gateway_blocks_in_progress_duplicate() -> None:
     envelope = MessageEnvelope(
         id="task-in-progress",
         type="request",
-        command="start_task",
+        command="acknowledge_task",
         data={"task_id": "TASK-123"},
     )
 

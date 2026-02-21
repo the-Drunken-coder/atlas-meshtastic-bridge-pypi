@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from atlas_asset_http_client_python import AtlasCommandHttpClient
 
-VALID_STATUSES = {"pending", "in_progress", "completed", "cancelled"}
+VALID_STATUSES = {"pending", "acknowledged", "completed", "cancelled"}
 
 
 async def run(

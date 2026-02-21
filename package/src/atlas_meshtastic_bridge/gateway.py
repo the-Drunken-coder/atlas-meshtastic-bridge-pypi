@@ -71,7 +71,7 @@ DEFAULT_COMMAND_MAP: Dict[str, str] = {
     "update_task": "tasks.update_task",
     "delete_task": "tasks.delete_task",
     "transition_task_status": "tasks.transition_task_status",
-    "start_task": "tasks.start_task",
+    "acknowledge_task": "tasks.acknowledge_task",
     "complete_task": "tasks.complete_task",
     "fail_task": "tasks.fail_task",
     # === Object Operations ===

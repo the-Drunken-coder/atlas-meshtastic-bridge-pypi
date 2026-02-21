@@ -88,7 +88,7 @@ COMMAND_PRESETS: Dict[str, Dict[str, Any]] = {
             },
             {
                 "name": "status_filter",
-                "prompt": "Status filter (default: pending,in_progress)",
+                "prompt": "Status filter (default: pending,acknowledged)",
             },
             {"name": "limit", "prompt": "Task limit (default: 10)", "type": "int"},
             {
@@ -186,8 +186,8 @@ COMMAND_PRESETS: Dict[str, Dict[str, Any]] = {
             {"name": "limit", "prompt": "Limit", "default": 5, "type": "int"},
         ],
     },
-    "start_task": {
-        "description": "Mark a task as started",
+    "acknowledge_task": {
+        "description": "Mark a task as acknowledged",
         "fields": [{"name": "task_id", "prompt": "Task ID"}],
     },
     "complete_task": {
@@ -392,7 +392,7 @@ def defaults_for_command(command: str, context: Dict[str, Any]) -> Dict[str, Any
         "update_task",
         "delete_task",
         "transition_task_status",
-        "start_task",
+        "acknowledge_task",
         "complete_task",
         "fail_task",
     }

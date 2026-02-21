@@ -225,20 +225,20 @@ def test_transport_correlation_id_deduplication() -> None:
 
 
 def test_transport_semantic_deduplication_for_tasks() -> None:
-    """start_task with same task_id should be deduped."""
+    """acknowledge_task with same task_id should be deduped."""
     radio = InMemoryRadio("node")
     transport = MeshtasticTransport(radio, segment_size=60)
 
     envelope1 = MessageEnvelope(
         id="task-1",
         type="request",
-        command="start_task",
+        command="acknowledge_task",
         data={"task_id": "TASK-1"},
     )
     envelope2 = MessageEnvelope(
         id="task-2",
         type="request",
-        command="start_task",
+        command="acknowledge_task",
         data={"task_id": "TASK-1"},
     )
 

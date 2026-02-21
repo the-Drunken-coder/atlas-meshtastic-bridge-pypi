@@ -126,7 +126,7 @@ def build_dedupe_keys(sender: str, envelope: "MessageEnvelope") -> DedupeKeys:
     if correlation_id:
         correlation_key = (sender, envelope.command, "corr", correlation_id)
 
-    if envelope.command in {"start_task", "complete_task", "fail_task"}:
+    if envelope.command in {"acknowledge_task", "complete_task", "fail_task"}:
         task_id = data.get("task_id")
         if task_id is not None:
             semantic_key = ("task", envelope.command, str(task_id))
