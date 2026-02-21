@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## [0.1.20] - 2026-02-21
+
+- Renamed `operations.tasks.start_task` to `operations.tasks.acknowledge_task` to reflect updated task lifecycle semantics.
+- Improved connection handling and error recovery in the Meshtastic client.
+- Enhanced message deduplication logic for gateway operations.
+- Updated gateway task listing and hardware harness command presets.
+- Synchronized all changes from upstream ATLAS monorepo (commit 348d027).
+
 ## [0.1.19] - 2026-02-20
 
 - Synchronized source from upstream ATLAS monorepo (commit 4486a6a).
