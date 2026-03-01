@@ -79,16 +79,16 @@ def test_create_entity_requires_fields() -> None:
     assert resp == "ok"
 
 
-def test_create_entity_rejects_raw_dict_components() -> None:
+def test_create_entity_accepts_raw_dict_components() -> None:
     client = _client_with_mock()
-    with pytest.raises(TypeError, match="Expected EntityComponents or TaskComponents"):
-        client.create_entity(  # type: ignore[arg-type]
-            "e1",
-            "asset",
-            "alias",
-            "drone",
-            components={"custom_status": "ok"},  # type: ignore[arg-type]
-        )
+    resp = client.create_entity(
+        "e1",
+        "asset",
+        "alias",
+        "drone",
+        components={"custom_status": "ok"},  # type: ignore[arg-type]
+    )
+    assert resp == "ok"
 
 
 def test_transition_task_status_requires_fields() -> None:
