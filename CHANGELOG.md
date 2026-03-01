@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## [0.1.21] - 2026-03-01
+
+- Relaxed `create_entity` type constraints to accept raw dictionaries for the `components` parameter, allowing plain dict inputs without requiring `EntityComponents` or `TaskComponents` instances.
+- Removed `TypeError` enforcement that previously rejected non-typed component inputs in the typed client API.
+- Updated `test_client_typed_api.py` to verify acceptance of raw dictionary components and adjusted test formatting.
+- Synchronized package source with ATLAS monorepo at commit 471e309.
+
 ## [0.1.20] - 2026-02-21
 
 - Renamed `operations.tasks.start_task` to `operations.tasks.acknowledge_task` to reflect updated task lifecycle semantics.
