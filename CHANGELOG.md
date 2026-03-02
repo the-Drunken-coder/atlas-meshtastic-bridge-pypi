@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [0.1.22] - 2026-03-02
+
+- Synchronized source from ATLAS monorepo commit 8c4f4ba
+- Refactored test_config.py and test_gateway.py to use centralized MOCK_API_TOKEN constant in place of hardcoded strings
+- Updated PKG-INFO metadata to align version tracking with current release
+
 ## [0.1.21] - 2026-03-01
 
 - Relaxed `create_entity` type constraints to accept raw dictionaries for the `components` parameter, allowing plain dict inputs without requiring `EntityComponents` or `TaskComponents` instances.
