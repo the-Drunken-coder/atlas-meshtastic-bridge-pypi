@@ -11,6 +11,8 @@ from atlas_meshtastic_bridge.transport import (
     MeshtasticTransport,
 )
 
+MOCK_API_TOKEN = "mock-token-for-testing"
+
 
 def test_gateway_initialization() -> None:
     """Test MeshtasticGateway initialization."""
@@ -18,13 +20,13 @@ def test_gateway_initialization() -> None:
     gateway = MeshtasticGateway(
         transport=transport,
         api_base_url="http://localhost:8000",
-        token="test-token",
+        token=MOCK_API_TOKEN,
         command_map={"custom": "custom.operation"},
     )
 
     assert gateway.transport == transport
     assert gateway.api_base_url == "http://localhost:8000"
-    assert gateway.token == "test-token"
+    assert gateway.token == MOCK_API_TOKEN
     assert gateway.command_map == {"custom": "custom.operation"}
     assert gateway._running is False
 
