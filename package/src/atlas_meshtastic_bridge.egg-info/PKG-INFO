@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: atlas-meshtastic-bridge
-Version: 0.1.21
-Summary: Reliable offline bridge for Atlas Command over Meshtastic radios.
+Version: 0.1.22
+Summary: [LEGACY] Reliable offline bridge for Atlas Command over Meshtastic radios. Superseded by next_gen_atlas_meshtastic_link.
 Author: ATLAS Team
 License-Expression: MIT
 Project-URL: Homepage, https://github.com/the-Drunken-coder/ATLAS
@@ -29,6 +29,9 @@ Requires-Dist: pytest>=7.0.0; extra == "dev"
 Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
 
 # Atlas Meshtastic Bridge
+
+> [!WARNING]
+> **DEPRECATION NOTICE**: This package is the older, legacy Meshtastic bridge. While it is still available and actively used in existing deployments, it has been superseded. We highly recommend new projects use the [Next Gen Atlas Meshtastic Link](../next_gen_atlas_meshtastic_link/) package moving forward, which serves as its replacement.
 
 Reliable offline access to Atlas Command over Meshtastic radios. The bridge runs in two modes:
 
