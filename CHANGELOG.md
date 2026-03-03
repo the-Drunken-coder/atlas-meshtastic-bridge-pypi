@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [0.1.23] - 2026-03-03
+
+- Marked package as deprecated in README with prominent warning that this is the legacy Meshtastic bridge
+- Updated PyPI package description to `[LEGACY]` status and directed users to `next_gen_atlas_meshtastic_link` replacement
+- Documented maintenance-mode status: existing deployments remain supported but new projects should migrate
+
 ## [0.1.22] - 2026-03-02
 
 - Synchronized source from ATLAS monorepo commit 8c4f4ba

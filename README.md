@@ -1,5 +1,8 @@
 # Atlas Meshtastic Bridge
 
+> [!WARNING]
+> **DEPRECATION NOTICE**: This package is the older, legacy Meshtastic bridge. While it is still available and actively used in existing deployments, it has been superseded. We highly recommend new projects use the [Next Gen Atlas Meshtastic Link](../next_gen_atlas_meshtastic_link/) package moving forward, which serves as its replacement.
+
 Reliable offline access to Atlas Command over Meshtastic radios. The bridge runs in two modes:
 
 - **Gateway** - connected to Atlas Command over IP. It receives Meshtastic requests, calls the HTTP API, and returns responses over radio.
