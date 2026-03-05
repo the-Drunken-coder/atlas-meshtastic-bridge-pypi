@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## [0.1.24] - 2026-03-05
+
+- Added path traversal protection to gateway operation loading by validating module names against an allow-list and strict regex pattern before dynamic import
+- Restricted operation imports to only modules explicitly defined in the command map
+- Hardened mode profile loading to prevent directory traversal when resolving JSON file paths
+- Migrated mode file I/O from `importlib.resources` to `pathlib` for explicit path validation and control
+- Removed stale setuptools egg-info metadata files from source distribution
+
 ## [0.1.23] - 2026-03-03
 
 - Marked package as deprecated in README with prominent warning that this is the legacy Meshtastic bridge
