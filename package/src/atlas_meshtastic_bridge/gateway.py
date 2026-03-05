@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 import sys
 import threading
 import time
@@ -50,6 +51,7 @@ from .metrics import DEFAULT_LATENCY_BUCKETS, get_metrics_registry
 from .transport import MeshtasticTransport
 
 LOGGER = logging.getLogger(__name__)
+_OPERATION_MODULE_RE = re.compile(r"^[a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)*$")
 
 
 # Supported bridge operations - maps command names to API client methods
@@ -113,6 +115,7 @@ class MeshtasticGateway:
         self.api_base_url = api_base_url
         self.token = token
         self.command_map = command_map or DEFAULT_COMMAND_MAP
+        self._allowed_operation_modules: Set[str] = set(self.command_map.values())
         self._running = False
         self._loop: Optional[asyncio.AbstractEventLoop] = None
         self._loop_thread: Optional[threading.Thread] = None
@@ -395,7 +398,12 @@ class MeshtasticGateway:
             )
 
     def _load_operation(self, name: str):
+        if name not in self._allowed_operation_modules:
+            raise ValueError(f"Operation '{name}' is not implemented")
+        if not _OPERATION_MODULE_RE.fullmatch(name):
+            raise ValueError(f"Operation '{name}' has invalid module path")
         try:
+            # nosemgrep: python.lang.security.audit.non-literal-import.non-literal-import
             return import_module(f".operations.{name}", package=__package__)
         except ModuleNotFoundError as exc:
             raise ValueError(f"Operation '{name}' is not implemented") from exc

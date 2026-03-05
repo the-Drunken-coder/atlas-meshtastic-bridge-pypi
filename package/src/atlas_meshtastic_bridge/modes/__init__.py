@@ -9,7 +9,7 @@ managing many knobs. Profiles live alongside this module as JSON files.
 from __future__ import annotations
 
 import json
-from importlib import resources
+from pathlib import Path
 from typing import Dict, Iterable
 
 from typing_extensions import TypedDict
@@ -29,8 +29,19 @@ class ModeProfile(TypedDict, total=False):
     transport: Dict[str, object]
 
 
+_MODES_DIR = Path(__file__).resolve().parent
+
+
+def _resolve_mode_path(path: str) -> Path:
+    candidate = (_MODES_DIR / path).resolve()
+    if candidate.parent != _MODES_DIR:
+        raise ValueError(f"Invalid mode path: {path}")
+    return candidate
+
+
 def _load_raw_mode(path: str) -> ModeProfile:
-    with resources.files(__package__).joinpath(path).open("r", encoding="utf-8") as handle:
+    resolved = _resolve_mode_path(path)
+    with resolved.open("r", encoding="utf-8") as handle:
         data = json.load(handle)
     if not isinstance(data, dict):
         raise ValueError(f"Mode file {path} did not contain an object")
@@ -49,7 +60,7 @@ def load_mode_profile(name: str) -> ModeProfile:
 
 def list_modes() -> Iterable[str]:
     """Return available mode names (without .json)."""
-    for entry in resources.files(__package__).iterdir():
+    for entry in _MODES_DIR.iterdir():
         if entry.name.endswith(".json"):
             yield entry.name.rsplit(".", 1)[0]
 
