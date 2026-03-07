@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## [0.1.25] - 2026-03-07
+
+- Added validation to `update_entity` requiring at least one of `subtype` or `components` to be provided, raising `ValueError` if called with no update fields
+- Renamed hardware-dependent integration tests (`test_bandwidth.py`, `test_modem_modes.py`, `test_radio_integration.py`, `test_range.py`, `test_range_estimation.py`) to `manual_*.py` prefix to exclude them from automated pytest discovery and clarify they require physical Meshtastic radio hardware
+- Synced latest changes from upstream ATLAS monorepo (commit 8d0cafc)
+
 ## [0.1.24] - 2026-03-05
 
 - Added path traversal protection to gateway operation loading by validating module names against an allow-list and strict regex pattern before dynamic import
