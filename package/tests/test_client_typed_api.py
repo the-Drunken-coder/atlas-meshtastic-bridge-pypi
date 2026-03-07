@@ -188,6 +188,15 @@ def test_get_entity_by_alias_requires_alias() -> None:
         client.get_entity_by_alias("")
 
 
+def test_update_entity_requires_update_fields() -> None:
+    client = _client_with_mock()
+    with pytest.raises(
+        ValueError, match="update_entity requires at least one of: subtype, components"
+    ):
+        client.update_entity("entity-123")
+    client.send_request.assert_not_called()  # type: ignore[attr-defined]
+
+
 def test_update_telemetry_builds_payload() -> None:
     client = _client_with_mock()
     client.update_telemetry("entity-1", latitude=1.0, longitude=2.0, altitude_m=100.0)
@@ -259,6 +268,16 @@ def test_get_tasks_by_entity_requires_entity_id() -> None:
     client = _client_with_mock()
     with pytest.raises(ValueError, match="get_tasks_by_entity requires 'entity_id'"):
         client.get_tasks_by_entity("")
+
+
+def test_update_task_requires_update_fields() -> None:
+    client = _client_with_mock()
+    with pytest.raises(
+        ValueError,
+        match="update_task requires at least one of: status, entity_id, components, extra",
+    ):
+        client.update_task("task-123")
+    client.send_request.assert_not_called()  # type: ignore[attr-defined]
 
 
 def test_acknowledge_task_builds_payload() -> None:
@@ -379,6 +398,22 @@ def test_get_object_requires_object_id() -> None:
         client.get_object("")
 
 
+def test_create_object_requires_content_type() -> None:
+    client = _client_with_mock()
+    with pytest.raises(ValueError, match="create_object requires 'content_type'"):
+        client.create_object("object-123", content_b64="Zm9v", content_type="")
+    client.send_request.assert_not_called()  # type: ignore[attr-defined]
+
+
+def test_update_object_requires_update_fields() -> None:
+    client = _client_with_mock()
+    with pytest.raises(
+        ValueError, match="update_object requires at least one of: usage_hints, referenced_by"
+    ):
+        client.update_object("object-123")
+    client.send_request.assert_not_called()  # type: ignore[attr-defined]
+
+
 def test_get_objects_by_entity_builds_payload() -> None:
     client = _client_with_mock()
     client.get_objects_by_entity("entity-1", limit=100)
@@ -415,6 +450,15 @@ def test_checkin_entity_requires_entity_id() -> None:
     client = _client_with_mock()
     with pytest.raises(ValueError, match="checkin_entity requires 'entity_id'"):
         client.checkin_entity("")
+
+
+def test_remove_object_reference_requires_target() -> None:
+    client = _client_with_mock()
+    with pytest.raises(
+        ValueError, match="remove_object_reference requires 'entity_id' or 'task_id'"
+    ):
+        client.remove_object_reference("object-123")
+    client.send_request.assert_not_called()  # type: ignore[attr-defined]
 
 
 def test_checkin_entity_with_datetime_since() -> None:
