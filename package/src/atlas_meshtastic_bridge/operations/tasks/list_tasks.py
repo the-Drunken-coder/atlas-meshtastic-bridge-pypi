@@ -4,21 +4,27 @@ from typing import Any, Dict
 
 from atlas_asset_http_client_python import AtlasCommandHttpClient
 
-VALID_STATUSES = {"pending", "acknowledged", "completed", "cancelled"}
-
 
 async def run(
     client: AtlasCommandHttpClient,
     envelope: Any,
     data: Dict[str, Any],
 ) -> Any:
-    """List tasks with optional status filtering."""
+    """List tasks (limit/offset only; server does not filter by status)."""
+    if data.get("status") not in (None, ""):
+        raise ValueError("list_tasks no longer supports 'status'; use limit/offset only")
+    try:
+        limit = int(data.get("limit", 25))
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"list_tasks requires numeric 'limit'; got {data.get('limit')!r}") from exc
+    try:
+        offset = int(data.get("offset", 0))
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            f"list_tasks requires numeric 'offset'; got {data.get('offset')!r}"
+        ) from exc
     payload: Dict[str, Any] = {
-        "limit": int(data.get("limit", 25)),
-        "offset": int(data.get("offset", 0)),
+        "limit": limit,
+        "offset": offset,
     }
-    status = data.get("status")
-    if status:
-        normalized = status if status in VALID_STATUSES else status.lower()
-        payload["status"] = normalized
     return await client.list_tasks(**payload)

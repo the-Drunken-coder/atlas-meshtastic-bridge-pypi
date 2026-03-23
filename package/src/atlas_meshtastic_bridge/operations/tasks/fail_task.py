@@ -14,9 +14,15 @@ async def run(
     task_id = data.get("task_id")
     if not task_id:
         raise ValueError("fail_task requires 'task_id'")
-    payload: Dict[str, Any] = {}
+    kwargs: Dict[str, Any] = {}
     if "error_message" in data:
-        payload["error_message"] = data["error_message"]
+        kwargs["error_message"] = data["error_message"]
     if "error_details" in data:
-        payload["error_details"] = data["error_details"]
-    return await client.fail_task(task_id=str(task_id), **payload)
+        kwargs["error_details"] = data["error_details"]
+    if "error" in data and isinstance(data["error"], dict):
+        err = data["error"]
+        if "message" in err:
+            kwargs["error_message"] = err["message"]
+        if "details" in err:
+            kwargs["error_details"] = err["details"]
+    return await client.fail_task(task_id=str(task_id), **kwargs)

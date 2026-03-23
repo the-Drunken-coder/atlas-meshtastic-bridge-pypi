@@ -220,7 +220,7 @@ python -m atlas_meshtastic_bridge.cli --mode client --gateway-node-id gw-1 \
 | `delete_entity` | Delete entity by ID. | `entity_id` |
 | `checkin_entity` | Check in an entity with optional telemetry and task filters. | `entity_id`, telemetry fields, optional `status_filter`, `limit`, `since`, `fields` |
 | `update_telemetry` | Update entity telemetry. | `entity_id`, telemetry fields (`latitude`, `longitude`, `altitude_m`, `speed_m_s`, `heading_deg`) |
-| `list_tasks` | List tasks. | `limit`, optional `status` |
+| `list_tasks` | List tasks (no server-side status filter). | `limit`, `offset` |
 | `get_task` | Fetch task by ID. | `task_id` |
 | `get_tasks_by_entity` | Tasks scoped to an entity. | `entity_id`, `limit` |
 | `create_task` | Create a task. | `task_id`, optional `status`, `entity_id`, `components`, `extra` |
@@ -243,7 +243,7 @@ python -m atlas_meshtastic_bridge.cli --mode client --gateway-node-id gw-1 \
 | `get_object_references` | List current object references. | `object_id` |
 | `validate_object_references` | Validate object references. | `object_id` |
 | `cleanup_object_references` | Cleanup invalid object references. | `object_id` |
-| `get_changed_since` | Incremental change feed (includes deleted_entities/deleted_tasks/deleted_objects; ~1h in-memory TTL). | `since`, `limit_per_type` |
+| `get_changed_since` | Incremental change feed (includes deleted_entities/deleted_tasks/deleted_objects as `{id,type,deleted_at}`; ~1h in-memory TTL). | `since`, `limit_per_type` |
 | `get_full_dataset` | Fetch complete dataset snapshot. | optional `entity_limit`, `task_limit`, `object_limit` |
 | `health_check` | Check Atlas Command health. | none |
 | `test_echo` | Echo payload for connectivity testing. | free-form |

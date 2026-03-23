@@ -130,10 +130,10 @@ COMMAND_PRESETS: Dict[str, Dict[str, Any]] = {
     },
     # === Tasks ===
     "list_tasks": {
-        "description": "List tasks (optional status)",
+        "description": "List tasks (limit/offset)",
         "fields": [
-            {"name": "status", "prompt": "Status (blank to skip)"},
             {"name": "limit", "prompt": "Limit", "default": 25, "type": "int"},
+            {"name": "offset", "prompt": "Offset", "default": 0, "type": "int"},
         ],
     },
     "get_task": {

@@ -220,11 +220,11 @@ def test_update_telemetry_requires_entity_id() -> None:
 
 def test_list_tasks_builds_payload() -> None:
     client = _client_with_mock()
-    client.list_tasks(status="pending", limit=50, offset=4)
+    client.list_tasks(limit=50, offset=4)
 
     client.send_request.assert_called_once_with(  # type: ignore[attr-defined]
         command="list_tasks",
-        data={"status": "pending", "limit": 50, "offset": 4},
+        data={"limit": 50, "offset": 4},
     )
 
 
@@ -236,6 +236,13 @@ def test_list_tasks_default_params() -> None:
         command="list_tasks",
         data={"limit": 25, "offset": 0},
     )
+
+
+def test_list_tasks_rejects_status() -> None:
+    client = _client_with_mock()
+    with pytest.raises(ValueError, match="no longer supported"):
+        client.list_tasks(status="pending")
+    client.send_request.assert_not_called()  # type: ignore[attr-defined]
 
 
 def test_get_task_builds_payload() -> None:
@@ -330,8 +337,7 @@ def test_fail_task_builds_payload() -> None:
         command="fail_task",
         data={
             "task_id": "task-123",
-            "error_message": "Failed",
-            "error_details": {"code": 500},
+            "error": {"message": "Failed", "details": {"code": 500}},
         },
     )
 
@@ -354,11 +360,11 @@ def test_fail_task_requires_task_id() -> None:
 
 def test_list_objects_builds_payload() -> None:
     client = _client_with_mock()
-    client.list_objects(limit=30, offset=10, content_type="image/jpeg")
+    client.list_objects(limit=30, offset=10)
 
     client.send_request.assert_called_once_with(  # type: ignore[attr-defined]
         command="list_objects",
-        data={"limit": 30, "offset": 10, "content_type": "image/jpeg"},
+        data={"limit": 30, "offset": 10},
     )
 
 

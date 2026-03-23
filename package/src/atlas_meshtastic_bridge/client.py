@@ -219,15 +219,18 @@ class MeshtasticClient:
     def list_tasks(
         self,
         *,
-        status: Optional[str] = None,
         limit: int = 25,
         offset: int = 0,
+        status: Optional[str] = None,
         timeout: Optional[float] = None,
         max_retries: Optional[int] = None,
     ) -> MessageEnvelope:
+        if status is not None:
+            raise ValueError(
+                "list_tasks(status=...) is no longer supported; remove the status argument "
+                "(the API does not filter tasks by status)."
+            )
         payload: Dict[str, Any] = {"limit": limit, "offset": offset}
-        if status:
-            payload["status"] = status
         return self._send_typed("list_tasks", payload, timeout, max_retries)
 
     def create_task(
@@ -387,10 +390,13 @@ class MeshtasticClient:
         if not task_id:
             raise ValueError("fail_task requires 'task_id'")
         payload: Dict[str, Any] = {"task_id": task_id}
+        err: Dict[str, Any] = {}
         if error_message is not None:
-            payload["error_message"] = error_message
+            err["message"] = error_message
         if error_details is not None:
-            payload["error_details"] = error_details
+            err["details"] = error_details
+        if err:
+            payload["error"] = err
         return self._send_typed("fail_task", payload, timeout, max_retries)
 
     def list_objects(
@@ -398,13 +404,10 @@ class MeshtasticClient:
         *,
         limit: int = 20,
         offset: int = 0,
-        content_type: Optional[str] = None,
         timeout: Optional[float] = None,
         max_retries: Optional[int] = None,
     ) -> MessageEnvelope:
         payload: Dict[str, Any] = {"limit": limit, "offset": offset}
-        if content_type:
-            payload["content_type"] = content_type
         return self._send_typed("list_objects", payload, timeout, max_retries)
 
     def create_object(
