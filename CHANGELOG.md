@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## [0.1.26] - 2026-03-23
+- Remove server-side `status` filtering from `list_tasks`; operation now accepts only `limit` and `offset` and raises `ValueError` if a status filter is provided.
+- Remove `content_type` filtering from `list_objects`; operation now accepts only `limit` and `offset` and raises `ValueError` if `content_type` is provided.
+- Add support for nested `error` object (containing `message` and `details` keys) in `fail_task` as an alternative to top-level `error_message` and `error_details` fields.
+- Add strict numeric validation for `limit` and `offset` parameters in `list_tasks` with descriptive error messages.
+- Update hardware harness command presets to reflect the simplified `list_tasks` interface (remove status prompt, add offset prompt).
+
 ## [0.1.25] - 2026-03-07
 
 - Added validation to `update_entity` requiring at least one of `subtype` or `components` to be provided, raising `ValueError` if called with no update fields
